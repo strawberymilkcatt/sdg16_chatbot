@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SDG 16 Chatbot</title>
+  <style>
+    /* Reset & base */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #4e91fc, #1b3dab);
+      color: #333;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .chat-container {
+      background: #fff;
+      width: 100%;
+      max-width: 480px;
+      height: 600px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    header {
+      background-color: #1b3dab;
+      color: #fff;
+      padding: 20px;
+      font-size: 1.6rem;
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: 1px;
+      user-select: none;
+    }
+
+    #chat-box {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background: #f0f4ff;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .message {
+      max-width: 75%;
+      padding: 14px 18px;
+      border-radius: 18px;
+      line-height: 1.4;
+      font-size: 1rem;
+      white-space: pre-line;
+      word-wrap: break-word;
+    }
+
+    .user {
+      align-self: flex-end;
+      background: #007bff;
+      color: white;
+      border-bottom-right-radius: 4px;
+      box-shadow: 0 2px 6px rgba(0, 123, 255, 0.4);
+    }
+
+    .bot {
+      align-self: flex-start;
+      background: #e4e9ff;
+      color: #222;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 2px 6px rgba(88, 93, 255, 0.3);
+    }
+
+    .input-area {
+      display: flex;
+      padding: 15px 20px;
+      background: #fff;
+      border-top: 1px solid #ddd;
+    }
+
+    #user-input {
+      flex: 1;
+      font-size: 1rem;
+      padding: 12px 16px;
+      border: 2px solid #ddd;
+      border-radius: 25px;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+
+    #user-input:focus {
+      border-color: #1b3dab;
+      box-shadow: 0 0 8px rgba(27, 61, 171, 0.4);
+    }
+
+    button {
+      background: #1b3dab;
+      border: none;
+      color: white;
+      padding: 0 22px;
+      margin-left: 12px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #15408a;
+    }
+
+    /* Scrollbar for chat box */
+    #chat-box::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #chat-box::-webkit-scrollbar-thumb {
+      background-color: #1b3dabaa;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="chat-container">
+    <header>SDG 16 Chatbot</header>
+    <div id="chat-box"></div>
+
+    <div class="input-area">
+      <input
+        type="text"
+        id="user-input"
+        placeholder="Ask about SDG 16 or say hi..."
+        autocomplete="off"
+        autofocus
+      />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const sdg16Info = {
+      overview: "SDG 16 promotes peaceful and inclusive societies, access to justice for all, and builds effective, accountable institutions at all levels.",
+      targets: `SDG 16 includes 12 targets such as:
+- Reducing all forms of violence and related death rates
+- Ending abuse, exploitation, trafficking, and violence against children
+- Promoting the rule of law at national and international levels
+- Ensuring responsive, inclusive, participatory and representative decision-making
+- Strengthening institutions to prevent violence and combat terrorism and crime
+- Reducing corruption and bribery`,
+      corruption: "Target 16.5 aims to significantly reduce corruption and bribery in all their forms.",
+      violence: "Target 16.1 focuses on reducing all forms of violence and related death rates everywhere.",
+      justice: "SDG 16 emphasizes access to justice for all, including legal identity, reducing violence, and ensuring accountability.",
+      institutions: "Strong institutions under SDG 16 mean transparent, accountable, and effective governance to build trust in public services.",
+      peace: "SDG 16 encourages peaceful societies by reducing violence, supporting conflict resolution, and promoting inclusive decision-making.",
+      data: "Progress on SDG 16 is measured using various indicators such as homicide rates, victims of violence, and levels of corruption.",
+      links: "Learn more at the official UN SDG page: https://sdgs.un.org/goals/goal16"
+    };
+
+    function getBotResponse(input) {
+      const message = input.toLowerCase();
+
+      // Greetings and small talk
+      if (message.match(/\b(hi|hello|hey|hola|greetings)\b/)) {
+        return "Hello! I'm your SDG 16 Chatbot. How can I assist you today?";
+      }
+      if (message.match(/\b(how are you|how's it going|how do you do)\b/)) {
+        return "I'm just a bot, but I'm here to help you with information about SDG 16!";
+      }
+      if (message.match(/\b(thank you|thanks|thank)\b/)) {
+        return "You're welcome! Feel free to ask me anything about SDG 16.";
+      }
+      if (message.match(/\b(who are you|what are you)\b/)) {
+        return "I'm a chatbot designed to provide information about Sustainable Development Goal 16 (SDG 16).";
+      }
+
+      // Specific SDG 16 topics
+      if (message.includes('targets') || message.includes('goal') || message.includes('objectives')) {
+        return sdg16Info.targets;
+      } else if (message.includes('corruption')) {
+        return sdg16Info.corruption;
+      } else if (message.includes('violence') || message.includes('kill') || message.includes('death')) {
+        return sdg16Info.violence;
+      } else if (message.includes('justice')) {
+        return sdg16Info.justice;
+      } else if (message.includes('institution') || message.includes('governance')) {
+        return sdg16Info.institutions;
+      } else if (message.includes('peace')) {
+        return sdg16Info.peace;
+      } else if (message.includes('data') || message.includes('indicator') || message.includes('progress')) {
+        return sdg16Info.data;
+      } else if (message.includes('where can i learn') || message.includes('more info') || message.includes('link')) {
+        return sdg16Info.links;
+      } else if (message.includes('what is') || message.includes('overview') || message.includes('sdg 16')) {
+        return sdg16Info.overview;
+      }
+
+      return "Sorry, I can answer questions about SDG 16 such as its targets, goals, corruption, violence, justice, and institutions. What would you like to know?";
+    }
+
+    function sendMessage() {
+      const inputBox = document.getElementById('user-input');
+      const chatBox = document.getElementById('chat-box');
+      const userMessage = inputBox.value.trim();
+
+      if (!userMessage) return;
+
+      // Show user message
+      const userMsgElem = document.createElement('p');
+      userMsgElem.className = 'message user';
+      userMsgElem.textContent = userMessage;
+      chatBox.appendChild(userMsgElem);
+
+      // Get bot response
+      const botReply = getBotResponse(userMessage);
+
+      // Show bot response after a short delay to simulate typing
+      setTimeout(() => {
+        const botMsgElem = document.createElement('p');
+        botMsgElem.className = 'message bot';
+        botMsgElem.textContent = botReply;
+        chatBox.appendChild(botMsgElem);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }, 400);
+
+      // Scroll immediately to user message
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      // Clear input and focus
+      inputBox.value = '';
+      inputBox.focus();
+    }
+
+    // Send message on Enter key press
+    document.getElementById('user-input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    });
+  </script>
+
+</body>
+</html>
